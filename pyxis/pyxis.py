@@ -19,28 +19,28 @@ import sys
 def main():
     parser = argparse.ArgumentParser(
         prog="pyxis",
-        description="Pyxis, a command-line tool for finding enriched motifs in genomic peak regions"
+        description="Pyxis, a command-line tool for finding enriched motifs in genomic peak regions",
+        usage='%(prog)s peaks.bed refgenome.fa motif.pwms [options]'
     )
 
     # ---------------------------------- Define and parse arguments --------------------------------------
     # Positional arguments (required)
-    parser.add_argument("peaks_bed", help="BED file of ChIP peaks", metavar="FILE", type=str)
-    parser.add_argument("ref_fasta", help="FASTA reference genome file", metavar="FILE", type=str)
+    parser.add_argument("peaks_bed", help="BED file of ChIP peaks", metavar="PEAKS", type=str)
+    parser.add_argument("ref_fasta", help="FASTA reference genome file", metavar="REF", type=str)
     parser.add_argument("motifs_pwms", help="PWMS file specifying PWMs of known motifs", 
-                        metavar="FILE", type=str)
+                        metavar="PWMS", type=str)
 
     # Optional arguments
-    parser.add_argument("-h", "--help", help="Show help message and exit", type=str, required=False)
-    parser.add_argument("-o", "--outdir", help="Write output to directory. Default: stdout", 
-                        metavar="DIRECTORY", type=str, required=False)
-    parser.add_argument("-b", "--background", help="Specify own background nucleotide frequencies." \
-                        "Default: randomly generated from reference genome", type=str, required=False)
+    parser.add_argument("-o", "--outdir", help="Write output to directory. Default: stdout",
+                        metavar="DIR", type=str, required=False)
+    parser.add_argument("-b", "--background", help="Specify own background nucleotide frequencies."
+                        " Default: randomly generated from reference genome", metavar="BKGD", type=str, required=False)
     parser.add_argument("-p", "--pval", help="Use specified p-value for enrichment significance. Default: 1e-5", 
-                        type=int, required=False)
+                        metavar="VAL", type=int, required=False)
     parser.add_argument("-s", "--seqlogo", help="Generate sequence logo for enriched motif", 
                         action="store_true", required=False)
-    parser.add_argument("--version", help="Print version and exit", 
-                        type=bool, version='{version}'.format(version=__version__))
+    parser.add_argument("--version", help="Print version and exit", action="version",
+                        version='{version}'.format(version=__version__))
 
     # Parse arguments
     args = parser.parse_args()

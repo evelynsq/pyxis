@@ -49,9 +49,25 @@ def ReadBED(peaks, refgenome):
     total_peaks : total number of peak sequences
     """
     seq = []
+    """
     bedfile = pd.read_csv(peaks, sep='\t')
-    for row in bedfile.iterrows():
-        seq.append(refgenome[row['chr']][row['start'] : row['end']].seq)
+    print(bedfile.columns)
+    for index, row in bedfile.iterrows():
+        print(row)
+        #entries = row.str.split("\t")
+        if (entries[0] == 'chr'):
+            continue
+        print(entries)
+        seq.append(WriteFastaSeq(refgenome, int(entries[0]), int(entries[1]), int(entries[2])))
+    """
+    with open(peaks, 'r') as bed:
+        for line in bed:
+            print(repr(line))
+            curr = line.strip().split("\t")
+            print(curr)
+            if (curr[0] != 'chr'):
+                print(curr)
+                seq.append(WriteFastaSeq(refgenome, int(curr[0]), int(curr[1]), int(curr[2])))
     total_peaks = len(seq)
     return seq, total_peaks
 
@@ -83,7 +99,7 @@ def ReadPWMS(motifs):
             PWMList.append(np.array(tmp_pwm.transpose()))
     return PWMList, pwm_names
     
-def WriteFastaSeq(refgenome, chr, start, end):
+def WriteFastaSeq(refgenome, chrom, start, end):
     """
     Write out reference genome sequence for a specified region within a chromosome
 
@@ -91,7 +107,7 @@ def WriteFastaSeq(refgenome, chr, start, end):
     ----------
     refgnome : pyfaidx object
         indexed reference genome fasta
-    chr : int
+    chrom : int
         chromosome number of interest
     start : int
         starting position of sequence
@@ -102,7 +118,7 @@ def WriteFastaSeq(refgenome, chr, start, end):
     -------
     fastaseq : string of specified reference genome sequence
     """
-    fastaseq = refgenome[chr][start:end].seq
+    fastaseq = refgenome[chrom][start:end].seq
     return fastaseq
 
 # ---------- Generate background sequences for comparison with peak sequences ---------------
