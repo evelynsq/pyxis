@@ -24,10 +24,10 @@ def main():
 
     # ---------------------------------- Define and parse arguments --------------------------------------
     # Positional arguments (required)
-    parser.add_argument("peaks_bed", help="BED file of ChIP peaks", metavar="FILE", type=str, required=True)
-    parser.add_argument("ref_fasta", help="FASTA reference genome file", metavar="FILE", type=str, required=True)
+    parser.add_argument("peaks_bed", help="BED file of ChIP peaks", metavar="FILE", type=str)
+    parser.add_argument("ref_fasta", help="FASTA reference genome file", metavar="FILE", type=str)
     parser.add_argument("motifs_pwms", help="PWMS file specifying PWMs of known motifs", 
-                        metavar="FILE", type=str, required=True)
+                        metavar="FILE", type=str)
 
     # Optional arguments
     parser.add_argument("-h", "--help", help="Show help message and exit", type=str, required=False)
