@@ -126,7 +126,7 @@ def main():
     # ------------------------------ Set up output file(s) ------------------------------------------
     outf.write("\nCreating output file 'enrichment_results.tsv'...")
     results = []
-    results.columns("motif_name", "p-val", "log p-val", "num_peak_motif", "pct_peak_motif",
+    results.columns("motif_name", "pval", "log_pval", "num_peak_motif", "pct_peak_motif",
                     "num_bg_motif", "pct_bg_motif", "enriched_status")
     enriched_status = ""
     for i in range(len(PWMList)):
@@ -134,7 +134,7 @@ def main():
             enriched_status = "Sig"
         else:
             enriched_status = "Non-sig"
-        results.append("\n" + pwm_names[i], pvals[i], np.log10(pvals[i]), num_peak_pass,
+        results.append("\n" + pwm_names[i], pvals[i], np.round(np.log10(pvals[i]), decimal=5), num_peak_pass,
                    num_peak_pass/total_f_peaks, num_bg_pass, num_bg_pass/total_b_peaks, enriched_status)
     output = pd.DataFrame(results)
     output = output.sort_values(by=['pval'], ascending=False)
