@@ -31,8 +31,8 @@ def main():
 
     # Optional arguments
     parser.add_argument("-h", "--help", help="Show help message and exit", type=str, required=False)
-    parser.add_argument("-o", "--out", help="Write output to file. Default: stdout", 
-                        metavar="FILE", type=str, required=False)
+    parser.add_argument("-o", "--outdir", help="Write output to directory. Default: stdout", 
+                        metavar="DIRECTORY", type=str, required=False)
     parser.add_argument("-b", "--background", help="Specify own background nucleotide frequencies." \
                         "Default: randomly generated from reference genome", type=str, required=False)
     parser.add_argument("-p", "--pval", help="Use specified p-value for enrichment significance. Default: 1e-5", 
@@ -40,7 +40,7 @@ def main():
     parser.add_argument("-s", "--seqlogo", help="Generate sequence logo for enriched motif", 
                         action="store_true", required=False)
     parser.add_argument("--version", help="Print version and exit", 
-                        type=bool, version='{version}'.format(version=__version__), required=False)
+                        type=bool, version='{version}'.format(version=__version__))
 
     # Parse arguments
     args = parser.parse_args()
