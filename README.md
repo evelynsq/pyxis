@@ -37,12 +37,12 @@ pyxis example-files/peaks.bed example-files/ref.fa example-files/test.pwms
 ```
 The output below should be produced:
 ```
-								motif_name      						pval   log_pval  num_peak_motif  pct_peak_motif  num_bg_motif    pct_bg_motif    enriched_status
-0       BACH2_HUMAN.H11MO.0.A   1.0     0.0     						3       						0.3     								2       								0.2     							Non-sig
-1       ALX3_HUMAN.H11MO.0.D    1.0     0.0     						2       						0.2     								3       								0.3     							Non-sig
-2       ELK1_HUMAN.H11MO.0.B    1.0     0.0     						0       						0.0     								1      								 0.1     							Non-sig
-3       KAISO_HUMAN.H11MO.1.A   1.0     0.0     						2       						0.2     								1       								0.1    							 Non-sig
-4       MLX_HUMAN.H11MO.0.D     1.0     0.0     						1       						0.1     								1       								0.1   							  Non-sig
+	motif_name      	pval   log_pval  num_peak_motif  pct_peak_motif  num_bg_motif    pct_bg_motif    enriched_status
+0       BACH2_HUMAN.H11MO.0.A   1.0     0.0     	3       	0.3     	2		0.2		Non-sig
+1       ALX3_HUMAN.H11MO.0.D    1.0     0.0     	2       	0.2     	3       	0.3     	Non-sig
+2       ELK1_HUMAN.H11MO.0.B    1.0     0.0     	0       	0.0     	1      		0.1     	Non-sig
+3       KAISO_HUMAN.H11MO.1.A   1.0     0.0     	2       	0.2     	1       	0.1    		Non-sig
+4       MLX_HUMAN.H11MO.0.D     1.0     0.0     	1       	0.1     	1       	0.1   		Non-sig
 ```
 To compare to the output of the analogous command `findMotifsGenome.pl` from [HOMER](http://homer.ucsd.edu/homer/):
 ```
@@ -54,7 +54,7 @@ findMotifsGenome.pl \
 
 ## pyxis Options
 - `-h`, `--help`: Show help message and exit.
-- `-o FILE`, --`output FILE`: Write output to specified file. Default: output is written to stdout.
+- `-o DIR`, --`output DIR`: Write output to specified file. Default: output is written to stdout.
 - `-b FILE`, `--background FILE`: Use specified BED file for background peaks in motif-finding. Default: Background sequences are randomly generated from the reference genome.
 - `-p PVAL`, --`pval PVAL`: Threshold p-value for enrichment significance. Default: 1e-5.
 - `-s`, `--seqlogo`: Generate sequence logo for enriched motif. Default: True.
@@ -62,7 +62,7 @@ findMotifsGenome.pl \
 
 ## File format
 
-### Known Motif PWMs file
+### Known Motif PWMS file
 This tab-delimited input file should contain the PWMs of known motifs, but transposed with columns representing A, C, G and T nucleotides and the rows being the motif sequence. The header for each motif consists of the motif name, as well as an alphabet length `alength` (the size of 4 for DNA's bases) and `w` number of positions in the motif specifying the overall dimensions for its PWM.
 
 ```
@@ -138,7 +138,7 @@ If you run into this error: `ModuleNotFoundError: No module named 'setuptools'`,
 ```
 sudo apt-get install python3-setuptools
 ```
-[Here are some other possible solutions that may work for you better than the above command](https://stackoverflow.com/questions/14426491/python-3-importerror-no-module-named-setuptools).
+Or you can try out some [other possible solutions](https://stackoverflow.com/questions/14426491/python-3-importerror-no-module-named-setuptools) that may work for you better than the above command.
 
 ## Contributors
 This repository was created by Evelyn Quan with inspiration from [mypileup](https://github.com/gymreklab/cse185-demo-project).
