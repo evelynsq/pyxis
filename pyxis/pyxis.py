@@ -155,12 +155,14 @@ def main():
     if args.seqlogo:
         outf.write("\nCreating seqlogos...")
         for i in range(len(PWMList)):
-            seq_pwm = seqlogo.Pwm(PWMList[i].transpose())
-            print(seq_pwm)
-            #Convert to ppm needed for plotting
-            seq_ppm = seqlogo.Ppm(seqlogo.pwm2ppm(seq_pwm))
-            seqlogo.seqlogo(seq_ppm, ic_scale=True, format='png', size='medium', filename=pwm_names[i]+'/'+pwm_names[i]+'.png')
-            outf.write("[" + (i + 1) + "/" + len(PWMList) + "]")
+            try:
+                seq_pwm = seqlogo.Pwm(PWMList[i].transpose())
+                #Convert to ppm needed for plotting
+                seq_ppm = seqlogo.Ppm(seqlogo.pwm2ppm(seq_pwm))
+                seqlogo.seqlogo(seq_ppm, ic_scale=True, format='png', size='medium', filename=pwm_names[i]+'/'+pwm_names[i]+'.png')
+                outf.write("[" + (i + 1) + "/" + len(PWMList) + "]")
+            except ValueError as e:
+                ERROR("Some or all PPM values did not add up to 1, check PWMS file.")
         outf.write("\nDone.")
     outf.write("\n\nPyxis has run successfully, please check 'pyxis_enrichments.tsv' for motif enrichment info!\n\n")
 
