@@ -85,7 +85,7 @@ def ReadPWMS(motifs):
             elif (len(currline) == 4):
                 currPWM.append(currline)
             elif (currline == ['']):
-                currPWM = (np.array(currPWM)).astype(np.float)
+                currPWM = (np.array(currPWM)).astype(float)
                 PWMList.append(currPWM.transpose())
                 currPWM = []
             else:
