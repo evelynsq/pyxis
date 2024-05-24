@@ -37,8 +37,12 @@ pyxis example-files/peaks.bed example-files/ref.fa example-files/test.pwms
 ```
 The output below should be produced:
 ```
-motif_name  pval  log_pval  num_peaks_motif  pct_peak_motif  num_bg_motif  pct_bg_motif  enriched_status
-(fillers - Under Construction)
+								motif_name      						pval   log_pval  num_peak_motif  pct_peak_motif  num_bg_motif    pct_bg_motif    enriched_status
+0       BACH2_HUMAN.H11MO.0.A   1.0     0.0     						3       						0.3     								2       								0.2     							Non-sig
+1       ALX3_HUMAN.H11MO.0.D    1.0     0.0     						2       						0.2     								3       								0.3     							Non-sig
+2       ELK1_HUMAN.H11MO.0.B    1.0     0.0     						0       						0.0     								1      								 0.1     							Non-sig
+3       KAISO_HUMAN.H11MO.1.A   1.0     0.0     						2       						0.2     								1       								0.1    							 Non-sig
+4       MLX_HUMAN.H11MO.0.D     1.0     0.0     						1       						0.1     								1       								0.1   							  Non-sig
 ```
 To compare to the output of the analogous command `findMotifsGenome.pl` from [HOMER](http://homer.ucsd.edu/homer/):
 ```
@@ -109,6 +113,13 @@ ATF1_HUMAN.H11MO.0.B    1.23E-4   -3.91009          5               0.2         
 
 ### Motif Sequence Logo
 If the option `-s` or `--seqlogo` is specified, a motif sequence logo for each motif will be printed. You can read more about `seqlogo` [here](https://pypi.org/project/seqlogo/).
+
+## Troubleshooting
+If you encounter a message such as **"pyxis: command not found"** when trying to run `pyxis`, please check the following message you should have seen when running `python setup.py install [--user]`: 
+
+**"Installing pyxis script to /home/<user>/.local/bin"**.
+
+Using the path that `pyxis` was installed to, run the following: `export PATH=$PATH:<path>
 
 ## Contributors
 This repository was created by Evelyn Quan with inspiration from [mypileup](https://github.com/gymreklab/cse185-demo-project).
