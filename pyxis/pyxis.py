@@ -31,7 +31,7 @@ def main():
                         metavar="PWMS", type=str)
 
     # Optional arguments
-    parser.add_argument("-o", "--outdir", help="Write output to directory. Default: stdout",
+    parser.add_argument("-o", "--out", help="Write output to directory. Default: stdout",
                         metavar="DIR", type=str, required=False)
     parser.add_argument("-b", "--background", help="Specify own background nucleotide frequencies."
                         " Default: randomly generated from reference genome", metavar="BKGD", type=str, required=False)
@@ -44,6 +44,11 @@ def main():
 
     # Parse arguments
     args = parser.parse_args()
+
+    # ------------------------- Set up output file -----------------------------------
+    if args.out is None:
+        outf = sys.stdout
+    else: outf = open(args.out, "w")
 
     # --------------------------- Loading in input files -------------------------------
     # load FASTA file (indexed with pyfaidx)
@@ -84,11 +89,6 @@ def main():
             f_seq_lens.append(len(f_seq[i]))
         b_seq, total_b_peaks = myutils.RandomBkSequence(f_seq_lens, len(f_seq), reffasta)
 
-    # Set up output file
-    if args.out is None:
-        outf = sys.stdout
-    else: outf = open(args.out, "w")
-
     # ------------------- Determing score thresholds for sequences to match PWM ----------------------------
     numsim = 10000
     null_pval = 0.01
@@ -105,42 +105,51 @@ def main():
         null_scores = [myutils.ScoreSeq(PWMList[i], 
                                 myutils.RandomSequence(PWMList[i].shape[1], freqs)) for j in range(numsim)]
         thresh = myutils.GetThreshold(null_scores, null_pval)
-        outf.write(thresh + "...")
         pwm_thresholds.append(thresh)
-        outf.write("[" + (i + 1) + "/" + len(PWMList) + "]")
-    outf.write("\nDone.")
+        outf.write("\n[" + str((i + 1)) + "/" + str(len(PWMList)) + "] .... ")
+    outf.write("Done.\n")
 
     # -------------------------------- Test for motif enrichment ------------------------------------
     outf.write("\nPerforming motif enrichment...")
     pvals = []
+    num_peak_passes = []
+    num_bg_passes = []
     for i in range(len(PWMList)):
         pwm = PWMList[i]
         thresh = pwm_thresholds[i]
         num_peak_pass = np.sum([int(myutils.FindMaxScore(pwm, seq)>thresh) for seq in f_seq])
+        num_peak_passes.append(num_peak_pass)
         num_bg_pass = np.sum([int(myutils.FindMaxScore(pwm, seq)>thresh) for seq in b_seq])
+        num_bg_passes.append(num_bg_pass)
         pval = myutils.ComputeEnrichment(total_f_peaks, num_peak_pass, total_b_peaks, num_bg_pass)
-        pval.append(pvals)
-        outf.write("[" + (i + 1) + "/" + len(PWMList) + "]")
-    outf.write("\nDone.")
+        pvals.append(pval)
+        outf.write("\n[" + str((i + 1)) + "/" + str(len(PWMList)) + "] .... ")
+    outf.write("Done.\n")
 
     # ------------------------------ Set up output file(s) ------------------------------------------
     outf.write("\nCreating output file 'enrichment_results.tsv'...")
-    results = []
-    results.columns("motif_name", "pval", "log_pval", "num_peak_motif", "pct_peak_motif",
-                    "num_bg_motif", "pct_bg_motif", "enriched_status")
-    enriched_status = ""
+    motif_names = np.array(pwm_names)
+    pvals_arr = np.array(pvals)
+    log_pvals = np.round(np.log10(pvals), 5)
+    num_peak_motifs = np.array(num_peak_passes)
+    pct_peak_motifs = np.array([num_peak/total_f_peaks for num_peak in num_peak_motifs])
+    num_bg_motifs = np.array(num_bg_passes)
+    pct_bg_motifs = np.array([num_bg/total_b_peaks for num_bg in num_bg_motifs])
+    enriched_statuses = []
     for i in range(len(PWMList)):
+        outf.write("\n....")
         if (pvals[i] <= thresh_pval):
-            enriched_status = "Sig"
+            enriched_statuses.append("Sig")
         else:
-            enriched_status = "Non-sig"
-        results.append("\n" + pwm_names[i], pvals[i], np.round(np.log10(pvals[i]), decimal=5), num_peak_pass,
-                   num_peak_pass/total_f_peaks, num_bg_pass, num_bg_pass/total_b_peaks, enriched_status)
+            enriched_statuses.append("Non-sig")
+    results = {"motif_name": motif_names, "pval": pvals, "log_pval": log_pvals, "num_peak_motif": num_peak_motifs,
+                "pct_peak_motif": pct_peak_motifs, "num_bg_motif": num_bg_motifs, "pct_bg_motif": pct_bg_motifs,
+                "enriched_status": enriched_statuses}
+    # put a check here later for all arrays being the same size
     output = pd.DataFrame(results)
     output = output.sort_values(by=['pval'], ascending=False)
     output.to_csv("pyxis_enrichments.tsv", sep="\t")
-
-    outf.write("\nDone.")
+    outf.write(" Done.")
 
     # generating seqlogos for motifs
     if args.seqlogo:
@@ -152,8 +161,8 @@ def main():
             seq_ppm = seqlogo.Ppm(seqlogo.pwm2ppm(seq_pwm))
             seqlogo.seqlogo(seq_ppm, ic_scale=True, format='png', size='medium', filename=pwm_names[i]+'/'+pwm_names[i]+'.png')
             outf.write("[" + (i + 1) + "/" + len(PWMList) + "]")
-    outf.write("\nDone.")
-    outf.write("\n\nPyxis has run successfully, please check 'pyxis_enrichments.tsv' for motif enrichment info!")
+        outf.write("\nDone.")
+    outf.write("\n\nPyxis has run successfully, please check 'pyxis_enrichments.tsv' for motif enrichment info!\n\n")
 
     reffasta.close()
     outf.close()

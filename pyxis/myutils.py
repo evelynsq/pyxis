@@ -48,26 +48,14 @@ def ReadBED(peaks, refgenome):
     seq : list of peak sequences
     total_peaks : total number of peak sequences
     """
-    seq = []
-    """
-    bedfile = pd.read_csv(peaks, sep='\t')
-    print(bedfile.columns)
-    for index, row in bedfile.iterrows():
-        print(row)
-        #entries = row.str.split("\t")
-        if (entries[0] == 'chr'):
-            continue
-        print(entries)
-        seq.append(WriteFastaSeq(refgenome, int(entries[0]), int(entries[1]), int(entries[2])))
-    """
+    seq = [] 
     with open(peaks, 'r') as bed:
         for line in bed:
-            print(repr(line))
             curr = line.strip().split("\t")
-            print(curr)
-            if (curr[0] != 'chr'):
-                print(curr)
-                seq.append(WriteFastaSeq(refgenome, int(curr[0]), int(curr[1]), int(curr[2])))
+            if (len(curr) != 6):
+                ERROR("BED file incorrectly formatted, please verify format matches what is specified in README.md.")
+            if (curr[0] != "chr"):
+                seq.append(WriteFastaSeq(refgenome, "chr"+curr[0], int(curr[1]), int(curr[2])))
     total_peaks = len(seq)
     return seq, total_peaks
 
@@ -85,18 +73,23 @@ def ReadPWMS(motifs):
     PWMList : list of peak sequences
     pwm_names : total number of peak sequences
     """
-    pwmfile = pd.read_csv(motifs, sep='\t')
+   # pwmfile = pd.read_csv(motifs, sep='\t')
     PWMList = []
     pwm_names = []
-    for row in pwmfile.iterrows():
-        tmp_pwm = []
-        if (row[0] == '#'):
-            name = row.strip().split("\t")[0]
-            pwm_names.append(name)
-        elif (any(isinstance(elem, float)) for elem in row):
-            tmp_pwm.append(row)
-        elif (row == '\n'):
-            PWMList.append(np.array(tmp_pwm.transpose()))
+    with open(motifs, 'r') as pwms:
+        currPWM = []
+        for line in pwms:
+            currline = line.strip().split("\t")
+            if (len(currline) == 3):
+                pwm_names.append(currline[0])
+            elif (len(currline) == 4):
+                currPWM.append(currline)
+            elif (currline == ['']):
+                currPWM = (np.array(currPWM)).astype(np.float)
+                PWMList.append(currPWM.transpose())
+                currPWM = []
+            else:
+                ERROR("PWMS file incorrectly formatted, please verify format matches what is specified in README.md.")
     return PWMList, pwm_names
     
 def WriteFastaSeq(refgenome, chrom, start, end):
@@ -107,8 +100,8 @@ def WriteFastaSeq(refgenome, chrom, start, end):
     ----------
     refgnome : pyfaidx object
         indexed reference genome fasta
-    chrom : int
-        chromosome number of interest
+    chrom : str
+        chromosome of interest
     start : int
         starting position of sequence
     end : int
@@ -181,7 +174,7 @@ def RandomBkSequence(seq_lens, num_seqs, refgenome):
     for i in range(num_seqs):
         chr = random.choice(chromosomes)
         start = random.randint(0, len(refgenome[chr]) - seq_lens[i])
-        end = len(refgenome[chr]) - start
+        end = start + seq_lens[i] - 1
         seqs.append(WriteFastaSeq(refgenome, chr, start, end))
     num_b_seqs = len(seqs)
     return seqs, num_b_seqs
@@ -260,8 +253,14 @@ def FindMaxScore(pwm, sequence):
     max_score : float
        Score of top match to the PWM
     """
+    if (len(pwm) == 0):
+        ERROR("PWM matrix was not found, verify matrices in PWMS file match format description in README.md.")
+    if (len(sequence) == 0):
+        ERROR("Sequence to compute max score for was not found. Exiting")
     max_score = -1*np.inf
     n = pwm.shape[1]
+    if (len(sequence) < n):
+        ERROR("Sequence length is shorter than PWM length. Exiting")
     # lists of scores. scores[i] should give the score of the substring sequence[i:i+n]
     forward_scores = [0]*(len(sequence) - n + 1)
     reverse_scores = [0]*(len(sequence) - n + 1)
