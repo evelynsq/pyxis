@@ -1,5 +1,7 @@
 # Pyxis
-A tool for detecting enriched motifs from ChIP-seq peaks using known motif position weight matrices (PWMs). Implemented as part of Advanced Bioinformatics Laboratory (CSE 185) final project at UC San Diego. **In progress.**
+A tool for detecting enriched motifs from ChIP-seq peaks using known motif position weight matrices (PWMs). Implemented as part of Advanced Bioinformatics Laboratory (CSE 185) final project at UC San Diego. 
+
+**Currently in progress.**
 
 ## Dependencies
 `pyxis` requires the following libraries to be installed:
@@ -54,9 +56,9 @@ findMotifsGenome.pl \
 
 ## pyxis Options
 - `-h`, `--help`: Show help message and exit.
-- `-o FILE`, --`output FILE`: Write output to specified file. Default: output is written to stdout.
+- `-o FILE`, `--output FILE`: Write output to specified file. Default: output is written to stdout.
 - `-b FILE`, `--background FILE`: Use specified BED file for background peaks in motif-finding. Default: Background sequences are randomly generated from the reference genome.
-- `-p PVAL`, --`pval PVAL`: Threshold p-value for enrichment significance. Default: 1e-5.
+- `-p PVAL`, `--pval PVAL`: Threshold p-value for enrichment significance. Default: 1e-5.
 - `-s`, `--seqlogo`: Generate sequence logo for enriched motif. Default: True. *(Note: for now, it does not work with the PWMs test file. Will change later.)*
 - `--version`: Print version and exit.
 
