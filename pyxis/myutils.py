@@ -348,3 +348,30 @@ def ComputeEnrichment(peak_total, peak_motif, bg_total, bg_motif):
     table = [[peak_motif, bg_motif], [peak_total - peak_motif, bg_total - bg_motif]]
     odds, pval = scipy.stats.fisher_exact(table)
     return pval
+
+# ----------------- Convert to PPM from PWM - needed for seqlogo generation ----------------------
+def pwm_to_ppm(pwm, background, pseudocount):
+    """ 
+    Convert pwm into normalized ppm needed to generate sequence logos from seqlogo
+
+    Parameters
+    ----------
+    pwm : ndarray
+       NumPy array of input PWM we want to convert
+    background : list
+       List of background nucleotide frequencies
+    pseudocount : float
+       Pseudocount used in reversing PWM calculations (default will be 1e-10)
+       
+    Returns
+    -------
+    normalized_ppm : ndarray
+       NumPy array of normalized PPM values 
+    """
+    with np.errstate(divide='ignore', over='ignore', under='ignore', invalid='ignore'):
+        probabilities = np.power(2, pwm + np.log2(background)) - pseudocount
+    transposed = probabilities.transpose()
+    # normalize all PPM columns to add to 1
+    col_sums = np.sum(transposed, 0)
+    normalized_ppm = transposed / col_sums
+    return normalized_ppm
