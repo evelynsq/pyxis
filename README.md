@@ -37,7 +37,7 @@ To run `pyxis` on a small test example using the provided files:
 ```
 pyxis example-files/peaks.bed example-files/ref.fa example-files/test.pwms [-b example-files/background.bed]
 ```
-The output below should be produced:
+Something similar to the output below should be produced:
 ```
 	motif_name      	pval   log_pval  num_peak_motif  pct_peak_motif  num_bg_motif    pct_bg_motif    enriched_status
 0       BACH2_HUMAN.H11MO.0.A   1.0     0.0     	3       	0.3     	2		0.2		Non-sig
@@ -59,7 +59,8 @@ findMotifsGenome.pl \
 - `-o FILE`, `--output FILE`: Direct output stream to specified file. **Default**: written to stdout.
 - `-b FILE`, `--background FILE`: Use specified BED file for background peaks in motif-finding. **Default**: Background sequences are randomly generated from the reference genome.
 - `-p PVAL`, `--pval PVAL`: Threshold p-value for enrichment significance. **Default**: 1e-5.
-- `-s`, `--seqlogo`: Generate sequence logo for enriched motif. **Default**: True. *(Note: for now, it does not work with the PWMs test file. Will change later.)*
+- `-s`, `--seqlogo`: Generate sequence logo for enriched motif. **Default**: True.
+- `--pseudo VAL`: Pseudocount for offsetting log2-odds PWM scores to PPM for generating sequence logos. Minimum value is 1e-5. **Default**: 1e-10.
 - `--version`: Print version and exit.
 
 ## File format
@@ -126,6 +127,8 @@ If you encounter a message such as **"pyxis: command not found"** when trying to
 > Please check the following message in the output you should have seen when running `python setup.py install [--user]`: **"Installing pyxis script to \<path>"**.
 > 
 > Using the path that `pyxis` was installed to, run the following: `export PATH=$PATH:<path>` to add this path to your $PATH variable so Linux can find and run `pyxis`.
+
+<br>
 
 If you run into this error: `ModuleNotFoundError: No module named 'setuptools'`:
 > This is because `setuptools` is required by `setup.py` to work. If you have root access, you can try installing `setuptools` with this command:
