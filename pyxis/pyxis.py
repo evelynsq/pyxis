@@ -31,17 +31,17 @@ def main():
                         metavar="PWMS", type=str)
 
     # Optional arguments
-    parser.add_argument("-o", "--out", help="Write output to directory. Default: stdout",
+    parser.add_argument("-o", "--out", help="write output to directory. default: stdout",
                         metavar="DIR", type=str, required=False)
-    parser.add_argument("-b", "--background", help="Specify own background nucleotide frequencies."
-                        " Default: randomly generated from reference genome", metavar="BKGD", type=str, required=False)
-    parser.add_argument("-p", "--pval", help="Use specified p-value for enrichment significance. Default: 1e-5", 
+    parser.add_argument("-b", "--background", help="specify own background nucleotide frequencies."
+                        " default: randomly generated from reference genome", metavar="BKGD", type=str, required=False)
+    parser.add_argument("-p", "--pval", help="use specified p-value for enrichment significance. default: 1e-5", 
                         metavar="VAL", type=float, required=False)
-    parser.add_argument("-s", "--seqlogo", help="Generate sequence logo for enriched motif", 
+    parser.add_argument("-s", "--seqlogo", help="generate sequence logo for enriched motif", 
                         action="store_true", required=False)
-    parser.add_argument("--pseudo", help="Pseudocount for offsetting log2-odds PWM scores to PPM for generating sequence logos."
-                        " Minimum value is 1e-5. Default: 1e-10", metavar="VAL", type=float, required=False)
-    parser.add_argument("--version", help="Print version and exit", action="version",
+    parser.add_argument("--pseudo", help="pseudocount for offsetting log2-odds PWM scores to PPM for generating sequence logos."
+                        " minimum value: 1e-5, default: 1e-10", metavar="VAL", type=float, required=False)
+    parser.add_argument("--version", help="print version and exit", action="version",
                         version='{version}'.format(version=__version__))
 
     # Parse arguments
@@ -179,7 +179,7 @@ def main():
             #    myutils.ERROR("An error occurred in sequence logo generation for " + pwm_names[i] + ".")
         outf.write("Done.")
     outf.write("\n\nPyxis has run successfully, please check 'pyxis_enrichments.tsv' for motif enrichment info!\n")
-    outf.write("If '-s' or '--seqlogo' was specified, check your directory for the motif sequence logos.\n\n")
+    outf.write("If '-s' or '--seqlogo' was specified, the motif sequence logos should be in your directory.\n\n")
 
     reffasta.close()
     outf.close()
