@@ -178,7 +178,8 @@ def main():
             #except Exception as e:
             #    myutils.ERROR("An error occurred in sequence logo generation for " + pwm_names[i] + ".")
         outf.write("Done.")
-    outf.write("\n\nPyxis has run successfully, please check 'pyxis_enrichments.tsv' for motif enrichment info!\n\n")
+    outf.write("\n\nPyxis has run successfully, please check 'pyxis_enrichments.tsv' for motif enrichment info!\n")
+    outf.write("If '-s' or '--seqlogo' was specified, check your directory for the motif sequence logos.\n\n")
 
     reffasta.close()
     outf.close()
