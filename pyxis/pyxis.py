@@ -39,6 +39,8 @@ def main():
                         metavar="VAL", type=int, required=False)
     parser.add_argument("-s", "--seqlogo", help="Generate sequence logo for enriched motif", 
                         action="store_true", required=False)
+    parser.add_argument("--pseudo", help="Pseudocount for offsetting log2-odds PWM scores to PPM for generating sequence logos."
+                        " Minimum value is 1e-5. Default: 1e-10", metavar="VAL", type=float, required=False)
     parser.add_argument("--version", help="Print version and exit", action="version",
                         version='{version}'.format(version=__version__))
 
@@ -80,14 +82,23 @@ def main():
         if not os.path.exists(args.background):
            myutils.ERROR("{background} does not exist".format(background=args.background))
         b_seq, total_b_peaks = myutils.ReadBED(args.background, reffasta)
-        #b_freqs = myutils.ComputeNucFreqs(b_seq)
+        b_freqs = myutils.ComputeNucFreqs(b_seq)
     else: 
         outf.write("Background not specified. Generating background sequences from reference genome...")
-        #b_freqs = myutils.ComputeNucFreqs(myutils.RandomBkSequence(f_seq_lens, len(f_seq), reffasta)[0])
         f_seq_lens = []
         for i in range(len(f_seq)):
             f_seq_lens.append(len(f_seq[i]))
         b_seq, total_b_peaks = myutils.RandomBkSequence(f_seq_lens, len(f_seq), reffasta)
+        # assume balanced nucleotide background frequencies, make seqlogos matching known patterns for reference
+        b_freqs = [0.25, 0.25, 0.25, 0.25]
+
+    # ------------------------------ Checking pseudocount value -------------------------------------------
+    if args.pseudo is not None:
+        if (args.pseudo > 1e-5):
+            myutils.ERROR("Pseudocount value must be 0.00001 or smaller.")
+        pseudocount = args.pseudo
+    else:
+        pseudocount = 1e-10
 
     # ------------------- Determing score thresholds for sequences to match PWM ----------------------------
     numsim = 10000
@@ -149,21 +160,24 @@ def main():
     output = pd.DataFrame(results)
     output = output.sort_values(by=['pval'], ascending=False)
     output.to_csv("pyxis_enrichments.tsv", sep="\t")
-    outf.write(" Done.")
+    outf.write(" Done.\n")
 
-    # generating seqlogos for motifs
+    # ------------------------ Generating sequence logos for motifs ---------------------------------
     if args.seqlogo:
         outf.write("\nCreating seqlogos...")
         for i in range(len(PWMList)):
-            try:
-                seq_pwm = seqlogo.Pwm(PWMList[i].transpose())
-                #Convert to ppm needed for plotting
-                seq_ppm = seqlogo.Ppm(seqlogo.pwm2ppm(seq_pwm))
-                seqlogo.seqlogo(seq_ppm, ic_scale=True, format='png', size='medium', filename=pwm_names[i]+'/'+pwm_names[i]+'.png')
-                outf.write("[" + (i + 1) + "/" + len(PWMList) + "]")
-            except ValueError as e:
-                ERROR("Some or all PPM values did not add up to 1, check PWMS file.")
-        outf.write("\nDone.")
+            #try:
+            # Convert to normalized + transposed ppm needed for seqlogo generation
+            with np.errstate(invalid='ignore'):
+                ppm = myutils.pwm_to_ppm(PWMList[i].transpose(), b_freqs, pseudocount)
+            #seq_pwm = seqlogo.Pwm(PWMList[i].transpose())
+            #seq_ppm = seqlogo.Ppm(seqlogo.pwm2ppm(seq_pwm))
+            seq_ppm = seqlogo.Ppm(ppm)
+            seqlogo.seqlogo(seq_ppm, ic_scale=True, format='png', size='medium', filename=pwm_names[i]+'_logo.png')
+            outf.write("\n[" + str((i + 1)) + "/" + str(len(PWMList)) + "] .... ")
+            #except Exception as e:
+            #    myutils.ERROR("An error occurred in sequence logo generation for " + pwm_names[i] + ".")
+        outf.write("Done.")
     outf.write("\n\nPyxis has run successfully, please check 'pyxis_enrichments.tsv' for motif enrichment info!\n\n")
 
     reffasta.close()
