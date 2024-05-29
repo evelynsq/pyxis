@@ -36,7 +36,7 @@ def main():
     parser.add_argument("-b", "--background", help="Specify own background nucleotide frequencies."
                         " Default: randomly generated from reference genome", metavar="BKGD", type=str, required=False)
     parser.add_argument("-p", "--pval", help="Use specified p-value for enrichment significance. Default: 1e-5", 
-                        metavar="VAL", type=int, required=False)
+                        metavar="VAL", type=float, required=False)
     parser.add_argument("-s", "--seqlogo", help="Generate sequence logo for enriched motif", 
                         action="store_true", required=False)
     parser.add_argument("--pseudo", help="Pseudocount for offsetting log2-odds PWM scores to PPM for generating sequence logos."
