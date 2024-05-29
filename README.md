@@ -25,7 +25,7 @@ git clone https://github.com/evelynsq/pyxis.git
 cd pyxis
 python setup.py install [--user]
 ```
-If the installation was successful, you should see a helpful message when typing `pyxis --help`. Please see [**Troubleshooting**](#troubleshooting) below for resolving potential installation issues.
+If the installation was successful, you should see a helpful message when typing `pyxis --help`. Please see [Troubleshooting](#troubleshooting) below for resolving potential installation issues.
 
 ## Basic Usage
 The basic usage of `pyxis` is:
@@ -35,7 +35,7 @@ pyxis peaks.bed ref.fa pwms.motifs [-o output.tsv] [other options]
 
 To run `pyxis` on a small test example using the provided files:
 ```
-pyxis example-files/peaks.bed example-files/ref.fa example-files/test.pwms
+pyxis example-files/peaks.bed example-files/ref.fa example-files/test.pwms [-b example-files/background.bed]
 ```
 The output below should be produced:
 ```
@@ -56,10 +56,10 @@ findMotifsGenome.pl \
 
 ## pyxis Options
 - `-h`, `--help`: Show help message and exit.
-- `-o FILE`, `--output FILE`: Write output to specified file. Default: output is written to stdout.
-- `-b FILE`, `--background FILE`: Use specified BED file for background peaks in motif-finding. Default: Background sequences are randomly generated from the reference genome.
-- `-p PVAL`, `--pval PVAL`: Threshold p-value for enrichment significance. Default: 1e-5.
-- `-s`, `--seqlogo`: Generate sequence logo for enriched motif. Default: True. *(Note: for now, it does not work with the PWMs test file. Will change later.)*
+- `-o FILE`, `--output FILE`: Direct output stream to specified file. **Default**: written to stdout.
+- `-b FILE`, `--background FILE`: Use specified BED file for background peaks in motif-finding. **Default**: Background sequences are randomly generated from the reference genome.
+- `-p PVAL`, `--pval PVAL`: Threshold p-value for enrichment significance. **Default**: 1e-5.
+- `-s`, `--seqlogo`: Generate sequence logo for enriched motif. **Default**: True. *(Note: for now, it does not work with the PWMs test file. Will change later.)*
 - `--version`: Print version and exit.
 
 ## File format
@@ -93,7 +93,7 @@ specify the chromosome number, followed by the chromosome's nucleotide sequence 
 
 ```
 >chr6
-ACTGTTTACTACTATCGACCCGTAAATC....
+ACTGTTTACTACTATCGACCCGTAAATCAT....
 >chr7
 TCGTTGATACCGTACATGCGATCGGATCGA....
 ```
@@ -102,15 +102,15 @@ TCGTTGATACCGTACATGCGATCGGATCGA....
 The output file `pyxis_enrichments.tsv` contains several resulting statistics from our motif enrichment, including:
 1. `motif_name`: identifier for motif.
 2. `pval`: p-value for the motif being significantly enriched in the input peaks.
-3. `log_pval`: log-10 value of the p-value.
-4. `num_peak_motif`: number of peaks that matched this motif
-5. `pct_peak_motif`: percentage of all peaks that matched motif
-6. `num_bg_motif`: number of background sequences that matched this motif
-7. `pct_bg_motif`: percentage of all peaks that matched motif
+3. `log_pval`: log-10 of the p-value.
+4. `num_peak_motif`: number of peaks that matched this motif.
+5. `pct_peak_motif`: fraction of all peaks that matched motif.
+6. `num_bg_motif`: number of background sequences that matched this motif.
+7. `pct_bg_motif`: fraction of all peaks that matched motif.
 8. `enriched_status`: significance of enrichment in this motif, given a user-specified p-value threshold or otherwise a default of 1e-5. 
 ```
-motif_name		pval	log_pval	num_peak_motif	pct_peak_motif	num_bg_motif	pct_bg_motif	enriched_status
-ATF1_HUMAN.H11MO.0.B	1.23E-4	-3.91009	5		0.2		3		0.1		Non-sig             
+motif_name		pval	   log_pval	num_peak_motif	pct_peak_motif	num_bg_motif	pct_bg_motif	enriched_status
+ATF1_HUMAN.H11MO.0.B	1.23E-4	   -3.91009	5		0.2		3		0.1		Non-sig             
 ```
 
 ### Motif Sequence Logo
@@ -119,18 +119,20 @@ If the option `-s` or `--seqlogo` is specified, a motif sequence logo for each m
 ### Background BED file
 The user-specified background file also follows the same format as the above [input peaks BED file](#peaks-bed-file).
 
-**Note**: the background should have the same number of sequences specified as the number of peaks in `peaks.bed`, and the background sequences should also be the same length as the peak sequences.
+**Note**: the background should have the same number of sequences specified as the number of peaks in `peaks.bed`, and the background sequences should also be the same lengths as the peak sequences.
 
 ## Troubleshooting
-1. If you encounter a message such as **"pyxis: command not found"** when trying to run `pyxis`, please check the following message in the output you should have seen when running `python setup.py install [--user]`: **"Installing pyxis script to \<path>"**.
+If you encounter a message such as **"pyxis: command not found"** when trying to run `pyxis`:
+> Please check the following message in the output you should have seen when running `python setup.py install [--user]`: **"Installing pyxis script to \<path>"**.
+> 
+> Using the path that `pyxis` was installed to, run the following: `export PATH=$PATH:<path>` to add this path to your $PATH variable so Linux can find and run `pyxis`.
 
-Using the path that `pyxis` was installed to, run the following: `export PATH=$PATH:<path>` to add this path to your $PATH variable so Linux can find and run `pyxis`.
-
-2. If you run into this error: `ModuleNotFoundError: No module named 'setuptools'`, this is because `setuptools` is required by `setup.py` to work. If you have root access, you can try installing setuptools with this command:
-```
-sudo apt-get install python3-setuptools
-```
-Or you can try out some [other possible solutions](https://stackoverflow.com/questions/14426491/python-3-importerror-no-module-named-setuptools) that may work for you better than the above command.
+If you run into this error: `ModuleNotFoundError: No module named 'setuptools'`:
+> This is because `setuptools` is required by `setup.py` to work. If you have root access, you can try installing `setuptools` with this command:
+> ```lang-js
+> sudo apt-get install python3-setuptools
+> ```
+> Or you can alternatively try out some [other possible solutions](https://stackoverflow.com/questions/14426491/python-3-importerror-no-module-named-setuptools) that may work for you better than the above command.
 
 ## Contributors
 This repository was created by Evelyn Quan with inspiration from [mypileup](https://github.com/gymreklab/cse185-demo-project).
