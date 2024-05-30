@@ -127,6 +127,7 @@ If you encounter a message such as **"pyxis: command not found"** when trying to
 > Please check the following message in the output you should have seen when running `python setup.py install [--user]`: **"Installing pyxis script to \<path>"**.
 > 
 > Using the path that `pyxis` was installed to, run the following: `export PATH=$PATH:<path>` to add this path to your $PATH variable so Linux can find and run `pyxis`.
+> Typically, your command should look something like **"export PATH=$PATH:/home/\<user>/.local/bin"**, but this can vary depending on where the script installed for you.
 
 <br>
 
