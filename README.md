@@ -30,7 +30,7 @@ If the installation was successful, you should see a helpful message when typing
 ## Basic Usage
 The basic usage of `pyxis` is:
 ```
-pyxis peaks.bed ref.fa pwms.motifs [-o output.tsv] [other options]
+pyxis peaks.bed ref.fa pwms.motifs [--background bg.bed] [other options]
 ```
 
 To run `pyxis` on a small test example using the provided files:
