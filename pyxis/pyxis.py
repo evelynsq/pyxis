@@ -89,8 +89,6 @@ def main():
         for i in range(len(f_seq)):
             f_seq_lens.append(len(f_seq[i]))
         b_seq, total_b_peaks = myutils.RandomBkSequence(f_seq_lens, len(f_seq), reffasta)
-        # assume balanced nucleotide background frequencies, make seqlogos matching known patterns for reference
-        #b_freqs = [0.25, 0.25, 0.25, 0.25]
         b_freqs = myutils.ComputeNucFreqs(b_seq)
 
     # ------------------------------ Checking pseudocount value -------------------------------------------
@@ -157,7 +155,6 @@ def main():
     results = {"motif_name": motif_names, "pval": pvals, "log_pval": log_pvals, "num_peak_motif": num_peak_motifs,
                 "pct_peak_motif": pct_peak_motifs, "num_bg_motif": num_bg_motifs, "pct_bg_motif": pct_bg_motifs,
                 "enriched_status": enriched_statuses}
-    # put a check here later for all arrays being the same size
     output = pd.DataFrame(results)
     output = output.sort_values(by=['pval'], ascending=True)
     output.to_csv("pyxis_enrichments.tsv", sep="\t", index=False)
@@ -171,8 +168,6 @@ def main():
                 # Convert to normalized + transposed ppm needed for seqlogo generation
                 with np.errstate(invalid='ignore'):
                     ppm = myutils.pwm_to_ppm(PWMList[i].transpose(), b_freqs, pseudocount)
-                    #seq_pwm = seqlogo.Pwm(PWMList[i].transpose())
-                    #seq_ppm = seqlogo.Ppm(seqlogo.pwm2ppm(seq_pwm))
                 seq_ppm = seqlogo.Ppm(ppm)
                 seqlogo.seqlogo(seq_ppm, ic_scale=True, format='png', size='medium', filename=pwm_names[i]+'_pyxis_logo.png')
                 outf.write("\n[" + str((i + 1)) + "/" + str(len(PWMList)) + "] .... ")
