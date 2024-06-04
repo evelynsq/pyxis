@@ -1,4 +1,4 @@
-### Pyxis Analysis
+## Pyxis Analysis
 
 The following notebook performs analyses of `pyxis` results to HOMER's `findMotifsGenome.pl`, generating visualizations comparing results, runtimes, and sequence logos.
 
