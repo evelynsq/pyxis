@@ -52,10 +52,10 @@ def ReadBED(peaks, refgenome):
     with open(peaks, 'r') as bed:
         for line in bed:
             curr = line.strip().split("\t")
-            if (len(curr) != 6):
-                ERROR("BED file incorrectly formatted, please verify format matches what is specified in README.md.")
-            if (curr[0] != "chr"):
-                seq.append(WriteFastaSeq(refgenome, "chr"+curr[0], int(curr[1]), int(curr[2])))
+            if (len(curr) < 4):
+                ERROR("BED file does not have all required columns, please verify format matches what is specified in the README.")
+            if (curr[0] != "chrom"):
+                seq.append(WriteFastaSeq(refgenome, curr[0], int(curr[1]), int(curr[2])))
     total_peaks = len(seq)
     return seq, total_peaks
 

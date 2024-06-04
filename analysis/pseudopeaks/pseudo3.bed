@@ -1,0 +1,16 @@
+chrom	start	end	peakID	.	strand	score
+chr3	10	36	PY_MUS.0001	.	+	900
+chr1	0	26	PY_MUS.0002	.	-	1000
+chr5	38	62	PY_HUM.0015	.	+	540
+chr4	15	45	PY_HUM.0016	.	+	1000 
+chr5	22	52	PY_DROS.0019	.	-	870
+chr2	4	30	PY_DROS.0020	.	-	1000
+chr1	4	26	PY_MUS.0003	.	+	950
+chr6	40	62	PY_HUM.0019	.	+	800
+chr5	71	99	PY_DROS.0021	.	-	640
+chr3	100	134	PY_MUS.0018	.	+	540
+chr9	130	159	PEAK.0000	.	-	900
+chr10	90	120	PEAK.0001	.	-	700
+chr7	94	118	PEAK.0003	.	+	1000
+chr6	30	56	PEAK.0004	.	-	800
+chr2	43	67	PEAK.0005	.	+	800
