@@ -30,7 +30,7 @@ If the installation was successful, you should see a helpful message when typing
 ## Basic Usage
 The basic usage of `pyxis` is:
 ```
-pyxis peaks.bed ref.fa pwms.motifs [--background bg.bed] [other options]
+pyxis peaks.bed ref.fa motif.pwms [--background bg.bed] [other options]
 ```
 
 To run `pyxis` on a small test example using the provided files:
@@ -39,19 +39,19 @@ pyxis example-files/peaks.bed example-files/ref.fa example-files/test.pwms [-b e
 ```
 Something similar to the output below should be produced:
 ```
-	motif_name      	pval   log_pval  num_peak_motif  pct_peak_motif  num_bg_motif    pct_bg_motif    enriched_status
-0       BACH2_HUMAN.H11MO.0.A   1.0     0.0     	3       	0.3     	2		0.2		Non-sig
-1       ALX3_HUMAN.H11MO.0.D    1.0     0.0     	2       	0.2     	3       	0.3     	Non-sig
-2       ELK1_HUMAN.H11MO.0.B    1.0     0.0     	0       	0.0     	1      		0.1     	Non-sig
-3       KAISO_HUMAN.H11MO.1.A   1.0     0.0     	2       	0.2     	1       	0.1    		Non-sig
-4       MLX_HUMAN.H11MO.0.D     1.0     0.0     	1       	0.1     	1       	0.1   		Non-sig
+motif_name      	pval   log_pval  num_peak_motif  pct_peak_motif  num_bg_motif    pct_bg_motif    enriched_status
+BACH2_HUMAN.H11MO.0.A   1.0     0.0     	3       	0.3     	2		0.2		Non-sig
+ALX3_HUMAN.H11MO.0.D    1.0     0.0     	2       	0.2     	3       	0.3     	Non-sig
+ELK1_HUMAN.H11MO.0.B    1.0     0.0     	0       	0.0     	1      		0.1     	Non-sig
+KAISO_HUMAN.H11MO.1.A   1.0     0.0     	2       	0.2     	1       	0.1    		Non-sig
+MLX_HUMAN.H11MO.0.D     1.0     0.0     	1       	0.1     	1       	0.1   		Non-sig
 ```
 To compare to the output of the analogous command `findMotifsGenome.pl` from [HOMER](http://homer.ucsd.edu/homer/):
 ```
 findMotifsGenome.pl \
  example-files/peaks.bed \
  example-files/ref.fa \
- example-files/test.pwms
+ homer-results/example-data
 ```
 
 ## pyxis Options
@@ -76,16 +76,18 @@ PWM[i+1,A]	PWM[i+1,C]	PWM[i+1,G]	PWM[i+1,T]
 
 ### Peaks BED file
 The input peaks file follows a standard [BED format](https://genome.ucsc.edu/FAQ/FAQformat.html) with the following columns:
-1. `chr`: Chromosome number.
+1. `chrom`: Chromosome number.
 2. `start`: Starting position in sequence.
 3. `end`: Ending position in sequence. Note: Position numbers are 0-based with [start,end).
 4. `peakID`: Identifier name of peak.
-5. `strand`: + for forward, - for negative strand.
+5. `.`: Column 5 not used.
+6. `strand`: + for forward, - for negative strand.
+7. `score`: Score value for peak (a number between 0-1000).
 
 The file is tab-delimited and should look something like this:
 ```
-chr	start	end	peakID		score	strand
-9	30	56	MUSC.0001	900	+
+chrom	start	end	peakID		.	strand	score
+chr9	30	56	MUSC.0001	.	+	900
 ```
 
 ### Reference Genome FASTA file
@@ -141,6 +143,3 @@ If you run into this error: `ModuleNotFoundError: No module named 'setuptools'`:
 ## Contributors
 This repository was created by Evelyn Quan with inspiration from [mypileup](https://github.com/gymreklab/cse185-demo-project).
 Feel free to submit a pull request with any proposed corrections or suggestions.
-
-## Testing
-Under construction.
