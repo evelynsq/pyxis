@@ -1,6 +1,6 @@
 ## Pyxis Analysis
 
-The following notebook performs analyses of `pyxis` results to HOMER's `findMotifsGenome.pl`, generating visualizations comparing results, runtimes, and sequence logos.
+The following notebook performs analyses of `pyxis` results to HOMER's `findMotifsGenome.pl`, such as through generating visualizations to compare results, runtimes, and sequence logos.
 
 Note: As mentioned in `BenchmarkPyxis.ipynb`, the reference genome `hg19.fa` required for running commands with the ISL1 dataset is not included in the `pyxis` repository due to its large size. 
 
