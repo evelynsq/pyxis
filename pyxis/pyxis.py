@@ -137,7 +137,7 @@ def main():
     outf.write("Done.\n")
 
     # ------------------------------ Set up output file(s) ------------------------------------------
-    outf.write("\nCreating output file 'enrichment_results.tsv'...")
+    outf.write("\nCreating output file 'pyxis_enrichments.tsv'...")
     motif_names = np.array(pwm_names)
     pvals_arr = np.array(pvals)
     log_pvals = np.round(np.log10(pvals), 5)
