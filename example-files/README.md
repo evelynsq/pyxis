@@ -7,12 +7,12 @@ pyxis example-files/peaks.bed example-files/ref.fa example-files/test.pwms [-b e
 
 Something similar to the output below should be produced:
 ```
-motif_name      				pval   log_pval  num_peak_motif  pct_peak_motif  num_bg_motif    pct_bg_motif    enriched_status
-BACH2_HUMAN.H11MO.0.A		1.0			0.0     			3       				0.3				     	2							0.2							Non-sig
-ALX3_HUMAN.H11MO.0.D		1.0			0.0     			2       				0.2     				3       			0.3     				Non-sig
-ELK1_HUMAN.H11MO.0.B		1.0			0.0     			0       				0.0     				1      				0.1     				Non-sig
-KAISO_HUMAN.H11MO.1.A		1.0			0.0     			2       				0.2     				1       			0.1    					Non-sig
-MLX_HUMAN.H11MO.0.D			1.0			0.0     			1       				0.1     				1       			0.1   					Non-sig
+motif_name      	pval   log_pval  num_peak_motif  pct_peak_motif  num_bg_motif    pct_bg_motif    enriched_status
+BACH2_HUMAN.H11MO.0.A   1.0     0.0     	3       	0.3     	2		0.2		Non-sig
+ALX3_HUMAN.H11MO.0.D    1.0     0.0     	2       	0.2     	3       	0.3     	Non-sig
+ELK1_HUMAN.H11MO.0.B    1.0     0.0     	0       	0.0     	1      		0.1     	Non-sig
+KAISO_HUMAN.H11MO.1.A   1.0     0.0     	2       	0.2     	1       	0.1    		Non-sig
+MLX_HUMAN.H11MO.0.D     1.0     0.0     	1       	0.1     	1       	0.1   		Non-sig
 ```
 
 To compare to the output of the analogous command `findMotifsGenome.pl` from [HOMER](http://homer.ucsd.edu/homer/):
@@ -30,7 +30,7 @@ This tab-delimited input file should contain the PWMs of known motifs, but trans
 
 ```
 motif_name	alength=4	w=18
-PWM[i,A]		PWM[i,C]		PWM[i,G]		PWM[i,T]
+PWM[i,A]	PWM[i,C]	PWM[i,G]	PWM[i,T]
 PWM[i+1,A]	PWM[i+1,C]	PWM[i+1,G]	PWM[i+1,T]
 ```
 
@@ -46,8 +46,8 @@ The input peaks file follows a standard [BED format](https://genome.ucsc.edu/FAQ
 
 The file is tab-delimited and should look something like this:
 ```
-chrom	start	end	peakID			.	strand	score
-chr9	30		56	MUSC.0001		.		+			900
+chrom	start	end	peakID		.	strand	score
+chr9	30	56	MUSC.0001	.	+	900
 ```
 
 ### Reference Genome FASTA file
@@ -72,8 +72,8 @@ The output file `pyxis_enrichments.tsv` contains several resulting statistics fr
 7. `pct_bg_motif`: fraction of all peaks that matched motif.
 8. `enriched_status`: significance of enrichment in this motif, given a user-specified p-value threshold or otherwise a default of 1e-5. 
 ```
-motif_name						pval	   		log_pval	num_peak_motif	pct_peak_motif	num_bg_motif	pct_bg_motif	enriched_status
-ATF1_HUMAN.H11MO.0.B	1.23E-4	   -3.91009					5							0.2								3						0.1						Non-sig             
+motif_name		pval	   log_pval	num_peak_motif	pct_peak_motif	num_bg_motif	pct_bg_motif	enriched_status
+ATF1_HUMAN.H11MO.0.B	1.23E-4	   -3.91009	5		0.2		3		0.1		Non-sig             
 ```
 
 ### Motif Sequence Logo
