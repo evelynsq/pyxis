@@ -12,13 +12,13 @@ For testing `pyxis` functions' average runtimes, use this general format command
 %timeit readbed = pyxis.myutils.ReadBED(f_peaks_dir, test_ref)
 ```
 
-We can also use this general command in Bash to run `%timeit` with `pyxis` and `HOMER` commands, though be aware that these runtimes may be large and take an hour or more depending on the size of the dataset and number of loop you are running on the command.
+We can also use this general command in Bash to run `%timeit` with `pyxis` and `HOMER` commands, though be aware that these runtimes may be large and take an hour or more depending on the size of the dataset and number of loops you are running on the command.
 
 ```
 python -m timeit -n 10 -s 'import os' 'os.system("pyxis example-files/peaks.bed example-files/ref.fa example-files/test.pwms > /dev/null")'
 ```
 
-I would suggest specifying `-r 1` for `findMotifsGenome.pl` with the ISL1 dataset.
+I would suggest specifying `-r 1` for `findMotifsGenome.pl` with the ISL1 dataset, due to long runtimes with `timeit`.
 
 ### Memory
 
