@@ -1,5 +1,7 @@
 # Pyxis
-A tool for detecting enriched motifs from ChIP-seq peaks using known motif position weight matrices (PWMs). Implemented as part of *Advanced Bioinformatics Laboratory* (CSE 185) final project at UC San Diego. 
+A tool for detecting enriched motifs from ChIP-seq peaks by using known motif position weight matrices (PWMs) for scoring. Implemented as part of *Advanced Bioinformatics Laboratory* (CSE 185) final project at UC San Diego. 
+
+[Link to presentation](https://drive.google.com/file/d/1OvZBzAinWRq-vMSDn69V9erE_HqpGB8O/view?usp=sharing)
 
 ## Dependencies
 `pyxis` requires the following libraries to be installed:
